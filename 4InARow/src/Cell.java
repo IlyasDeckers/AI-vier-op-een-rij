@@ -4,7 +4,7 @@
 public class Cell {
     private int row;
     private int col;
-    private ShiveType shiveType;
+    private TokenType tokenType;
 
     public Cell(int row, int col) {
         this.row = row;
@@ -13,19 +13,19 @@ public class Cell {
     }
 
     public void clear() {
-        shiveType = ShiveType.Empty;
+        tokenType = TokenType.Empty;
     }
 
     public void paint() {
-        System.out.print(shiveType.getColour());
+        System.out.print(tokenType.getColour());
     }
 
-    public ShiveType getShiveType() {
-        return shiveType;
+    public TokenType getTokenType() {
+        return tokenType;
     }
 
-    public void setShiveType(ShiveType shiveType) {
-        this.shiveType = shiveType;
+    public void setTokenType(TokenType tokenType) {
+        this.tokenType = tokenType;
     }
 
     public int getRow() {
