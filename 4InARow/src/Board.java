@@ -1,10 +1,13 @@
+import org.apache.commons.lang.ArrayUtils;
+
 /**
  * Created by Tom on 24/09/2015.
  */
 public class Board {
     private int rows;
     private int columns;
-    private Cell[][] cells;
+    //niet private omdat deze variabele in run gebruikt wordt moeten we naar kijken!!!!
+    Cell[][] cells;
 
     public Board(int rows, int columns) {
         this.rows = rows;
@@ -79,6 +82,59 @@ public class Board {
     //if true rotate clockwise
     //if false rotate counterclockwise
     public void turnBoard(int chosenPart, boolean direction) {
+        Cell[][] chosenBoard =  getChosenPartFromBoard(chosenPart);
+
+        Cell temp;
+        // transpose matrix
+        /*
+         from 1 2 3
+              4 5 6
+              7 8 9
+
+         to   1 4 7
+              2 5 8
+              3 6 9
+         */
+        for (int i =0; i<chosenBoard.length/2+1; i++) {
+            for (int j = i; j<chosenBoard[0].length; j++) {
+                temp = chosenBoard[i][j];
+                chosenBoard[i][j] = chosenBoard[j][i];
+                chosenBoard[j][i] = temp;
+            }
+        }
+
+        // reverse rows or columns
+        /*
+
+
+
+        if (direction) {
+            for (int i = 0; i <chosenBoard.length; i ++) {
+                ArrayUtils.reverse(chosenBoard[i]);
+            }
+        } else {
+            for (int col = 0; col < chosenBoard.length; col ++) {
+                Cell[] columntoReverse = new Cell[3];
+                for (int row = 0; row < chosenBoard.length; row++){
+                    columntoReverse[row] = (chosenBoard[row][col]);
+                }
+                ArrayUtils.reverse(columntoReverse);
+            }
+        }*/
+        for (int row = 0; row < 3; ++row){
+            for (int col = 0; col < 3; ++col){
+                chosenBoard[row][col].paint();
+                if (col < 3 -1) System.out.print("|");
+            }
+            System.out.println();
+            if (row < 3-1){
+                System.out.println("----");
+            }
+        }
+        putTransposedPartInBoard(chosenBoard, chosenPart);
+    }
+
+    private Cell[][] getChosenPartFromBoard(int chosenPart) {
         Cell[][] chosenBoard = new Cell[3][3];
         switch (chosenPart) {
             case 1:
@@ -110,17 +166,39 @@ public class Board {
                 }
                 break;
         }
-        Cell[][] turnedBoard = new Cell[3][3];
+        return chosenBoard;
+    }
 
-        if (direction) {
-            for (int row = 0; row < 3; row ++) {
-                for (int col = 0; col <3;col++){
-                    if (row == 0) {
-                        turnedBoard[col][2] = chosenBoard[row][col];
+    private void putTransposedPartInBoard(Cell[][] transposedPart, int chosenPart) {
+        switch (chosenPart) {
+            case 1:
+                for (int row = 0; row < 3; row ++) {
+                    for (int col = 0; col <3;col++){
+                        cells[row][col] = transposedPart[row][col];
                     }
-                    turnedBoard[row][col] = chosenBoard[row][col];
                 }
-            }
+                break;
+            case 2:
+                for (int row = 0; row < 3; row ++) {
+                    for (int col = 3; col < 6;col++){
+                        cells[row][col] = transposedPart[row][col];
+                    }
+                }
+                break;
+            case 3:
+                for (int row = 3; row < 6; row ++) {
+                    for (int col = 0; col <3;col++){
+                        cells[row][col] = transposedPart[row][col];
+                    }
+                }
+                break;
+            case 4:
+                for (int row = 3; row < 6; row ++) {
+                    for (int col = 3; col <6;col++){
+                        cells[row][col] = transposedPart[row][col];
+                    }
+                }
+                break;
         }
     }
 

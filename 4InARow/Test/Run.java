@@ -13,10 +13,10 @@ public class Run {
         board = new Board(6, 6);
 
         initGame();
-
+        board.paint();
         do {
             doPlayerMove(currentPlayer);
-            board.paint();
+
             currentPlayer = (currentPlayer == TokenType.BLACK) ? TokenType.WHITE : TokenType.BLACK;
 
         } while (gameState == GameState.PLAYING);
@@ -52,6 +52,7 @@ public class Run {
                 if (board.getShiveType(selectedRow, selectedCol) == TokenType.Empty) {
                     board.setShiveType(selectedRow, selectedCol, currentPlayer);
                     validInput = true;
+                    //variabele cells wordt hier gebruikt mag niet!!!!
                     if (board.check4Win(board.cells[selectedRow][selectedCol])) {
                         if (currentPlayer == TokenType.WHITE) gameState = GameState.WHITE_WON;
                         else if (currentPlayer == TokenType.BLACK) gameState = GameState.BLACK_WON;
@@ -64,6 +65,28 @@ public class Run {
                 System.out.println("This move is invalid");
             }
         } while (!validInput);
+        board.paint();
+        int keuze;
+        do {
+            System.out.print("\nWelk deel van het bord wil je draaien? (1-4)");
+            keuze = input.nextInt();
+            if (keuze > 0 && keuze < 5) {
+                System.out.print("In welke richting wilt u het bord draaien? (l of r)");
+                input = new Scanner(System.in);
+                String richting = input.nextLine();
+                switch (richting.charAt(0)) {
+                    case 'l':
+                        board.turnBoard(keuze, false);
+                        break;
+                    case 'r':
+                        board.turnBoard(keuze, true);
+                        break;
+                }
+            } else {
+                System.out.println("Verkeerde keuze");
+            }
+        } while (keuze <= 0 && keuze >= 5);
+        board.paint();
     }
 
     public static void main(String[] args) {
