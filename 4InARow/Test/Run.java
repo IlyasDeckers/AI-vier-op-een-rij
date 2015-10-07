@@ -8,6 +8,8 @@ public class Run {
     private Board board;
     private TokenType currentPlayer;
     private GameState gameState;
+    private int lastSetRow;
+    private int lastSetCol;
 
     public Run() {
         board = new Board(6, 6);
@@ -30,7 +32,6 @@ public class Run {
     }
 
     public void initGame() {
-        board.init();
         currentPlayer = TokenType.BLACK;
         gameState = GameState.PLAYING;
     }
@@ -52,11 +53,9 @@ public class Run {
                 if (board.getShiveType(selectedRow, selectedCol) == TokenType.Empty) {
                     board.setShiveType(selectedRow, selectedCol, currentPlayer);
                     validInput = true;
-                    //variabele cells wordt hier gebruikt mag niet!!!!
-                    if (board.check4Win(board.cells[selectedRow][selectedCol])) {
-                        if (currentPlayer == TokenType.WHITE) gameState = GameState.WHITE_WON;
-                        else if (currentPlayer == TokenType.BLACK) gameState = GameState.BLACK_WON;
-                    }
+                    lastSetCol = selectedCol;
+                    lastSetRow = selectedRow;
+
                     break;
                 }
 
@@ -87,6 +86,10 @@ public class Run {
             }
         } while (keuze <= 0 && keuze >= 5);
         board.paint();
+        if (board.check4Win(lastSetRow,lastSetCol)) {
+            if (currentPlayer == TokenType.WHITE) gameState = GameState.WHITE_WON;
+            else if (currentPlayer == TokenType.BLACK) gameState = GameState.BLACK_WON;
+        }
     }
 
     public static void main(String[] args) {

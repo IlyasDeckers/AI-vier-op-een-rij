@@ -13,4 +13,9 @@ public enum TokenType {
 
         return colour;
     }
+
+
+    public void paint(){
+        System.out.print(getColour());
+    }
 }
